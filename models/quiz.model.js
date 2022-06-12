@@ -47,7 +47,7 @@ const quizSchema = new Schema(
       type: Boolean,
       default: true,
     },
-    uniqueId: {
+    endpoint: {
       type: String,
       required: true,
     },

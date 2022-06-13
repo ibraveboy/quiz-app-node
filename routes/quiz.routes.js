@@ -25,4 +25,9 @@ module.exports = (app) => {
     [verifyToken],
     controller.createQuiz
   );
+  app.delete(
+    "/api/quiz/:id",
+    [verifyToken],
+    controller.deleteQuiz
+  );
 }

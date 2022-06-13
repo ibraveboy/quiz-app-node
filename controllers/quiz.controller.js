@@ -35,6 +35,10 @@ const getQuizById = async (req, res) => {
   const {
     id
   } = req.params;
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Accept"
+  );
   if (!id) {
     return res.status(400).json({
       status: 'error',
@@ -93,7 +97,7 @@ const createQuiz = async (req, res) => {
       message: 'Please enter endpoint'
     });
   }
-  if (!questions) {
+  if (!questions || !Array.isArray(questions) || (Array.isArray(questions) && questions.length === 0)) {
     return res.status(400).json({
       status: 'error',
       message: 'At least one question is required'
@@ -123,8 +127,45 @@ const createQuiz = async (req, res) => {
   }
 }
 
+const deleteQuiz = async (req, res) => {
+  const {
+    id
+  } = req.params;
+  const {
+    userId
+  } = req;
+  if (!id) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Quiz not found. Try with different id'
+    });
+  }
+  try {
+    const quiz = await Quiz.findOneAndDelete({
+      _id: id,
+      userId
+    });
+    if (!quiz) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Quiz not found'
+      });
+    }
+    return res.json({
+      message: 'Quiz deleted successfully',
+      status: 'success',
+    });
+  } catch (err) {
+    return res.status(500).json({
+      status: 'error',
+      message: err
+    });
+  }
+}
+
 module.exports = {
   getAllQuizzes,
   getQuizById,
-  createQuiz
+  createQuiz,
+  deleteQuiz
 }

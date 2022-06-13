@@ -15,10 +15,10 @@ const questionSchema = new Schema(
       required: true,
     },
     options: [optionSchema],
-    correctAnswer: {
-      type: Number,
+    correctAnswer: [{
+      type: String,
       required: true,
-    },
+    }],
     isEnabled: {
       type: Boolean,
       default: true,
